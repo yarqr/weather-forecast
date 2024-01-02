@@ -1,19 +1,20 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from weather_forecast.domain.entities.user import User
 
 
 class UserRepository(ABC):
     @abstractmethod
-    async def create(self, user: User) -> None:
+    async def add(self, user: User) -> None:
         ...
 
     @abstractmethod
-    async def get_city(self, user: User) -> None:
+    async def get_city(self, user: User) -> Optional[str]:
         ...
 
     @abstractmethod
-    async def get_language(self, user: User) -> None:
+    async def get_language(self, user: User) -> Optional[str]:
         ...
 
     @abstractmethod
