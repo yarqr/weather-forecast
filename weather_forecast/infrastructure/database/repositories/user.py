@@ -34,6 +34,8 @@ class UserRepositoryImpl(UserRepository):
 
     async def edit_city(self, user: User) -> None:
         await self.session.merge(models.User(id=user.id, city=user.city))
+        await self.session.commit()
 
     async def edit_language(self, user: User) -> None:
         await self.session.merge(models.User(id=user.id, language=user.language))
+        await self.session.commit()
