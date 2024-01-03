@@ -12,13 +12,15 @@ class UserRepositoryImpl(UserRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    async def commit(self) -> None:
+        await self.session.commit()
+
     async def add(self, user: User) -> None:
         user_exists = await self.session.execute(
             exists().where(models.User.id == user.id).select()
         )
         if not user_exists.scalar():
             self.session.add(models.User(id=user.id))
-            await self.session.commit()
 
     async def get_city(self, user: User) -> Optional[str]:
         city = await self.session.execute(
@@ -34,8 +36,6 @@ class UserRepositoryImpl(UserRepository):
 
     async def edit_city(self, user: User) -> None:
         await self.session.merge(models.User(id=user.id, city=user.city))
-        await self.session.commit()
 
     async def edit_language(self, user: User) -> None:
         await self.session.merge(models.User(id=user.id, language=user.language))
-        await self.session.commit()

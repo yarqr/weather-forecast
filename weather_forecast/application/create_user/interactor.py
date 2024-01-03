@@ -8,4 +8,5 @@ class CreateUser(Interactor[User, None]):
         self.user_repo = user_repo
 
     async def __call__(self, user: User) -> None:
-        return await self.user_repo.add(user)
+        await self.user_repo.add(user)
+        await self.user_repo.commit()

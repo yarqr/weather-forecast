@@ -6,6 +6,10 @@ from weather_forecast.domain.entities.user import User
 
 class UserRepository(ABC):
     @abstractmethod
+    async def commit(self) -> None:
+        ...
+
+    @abstractmethod
     async def add(self, user: User) -> None:
         ...
 
