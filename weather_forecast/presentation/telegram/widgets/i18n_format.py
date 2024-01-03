@@ -15,4 +15,4 @@ class I18nFormat(Text):
     async def _render_text(self, data: Any, manager: DialogManager) -> str:
         return manager.middleware_data[I18N_FORMAT_KEY](  # type: ignore[no-any-return]
             self.key, data
-        )
+        ).format_map(data)

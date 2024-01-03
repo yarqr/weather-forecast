@@ -13,7 +13,7 @@ class WeatherServiceImpl(WeatherService):
     async def get_by_user(self, user: User) -> Weather:
         async with self.session.get(
             "https://api.openweathermap.org/data/2.5/weather",
-            params={"q": user.city, "appid": self.owm_token},
+            params={"q": user.city, "appid": self.owm_token, "units": "metric"},
         ) as resp:
             data = await resp.json()
             return Weather(data["main"]["temp"])

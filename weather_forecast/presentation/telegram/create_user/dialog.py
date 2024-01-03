@@ -1,13 +1,13 @@
 from aiogram.types import CallbackQuery
-from aiogram_dialog import Dialog, DialogManager, StartMode, Window
-from aiogram_dialog.widgets.kbd import Back, Next, Select, Start
+from aiogram_dialog import Dialog, DialogManager, Window
+from aiogram_dialog.widgets.kbd import Back, Next, Select, Start, SwitchTo
 from aiogram_dialog.widgets.text import Format
 
 from weather_forecast.application.update_user_language.interactor import (
     UpdateUserLanguage,
 )
 from weather_forecast.domain.entities.user import User
-from weather_forecast.presentation.telegram.states import CreateUserSG
+from weather_forecast.presentation.telegram.states import CreateUserSG, UpdateUserCitySG
 from weather_forecast.presentation.telegram.widgets.i18n_format import (
     I18N_FORMAT_KEY,
     I18nFormat,
@@ -40,15 +40,21 @@ create_user = Dialog(
         state=CreateUserSG.choose_language,
     ),
     Window(
-        I18nFormat("main"), Next(I18nFormat("btn-settings")), state=CreateUserSG.main
+        I18nFormat("main"),
+        Start(
+            I18nFormat("btn-input-city"),
+            "start_update_user_city",
+            UpdateUserCitySG.input_city,
+        ),
+        Next(I18nFormat("btn-settings")),
+        state=CreateUserSG.main,
     ),
     Window(
         I18nFormat("settings"),
-        Start(
+        SwitchTo(
             I18nFormat("btn-edit-language"),
             "to_choose_language",
             CreateUserSG.choose_language,
-            mode=StartMode.RESET_STACK,
         ),
         Back(I18nFormat("btn-back")),
         state=CreateUserSG.settings,
