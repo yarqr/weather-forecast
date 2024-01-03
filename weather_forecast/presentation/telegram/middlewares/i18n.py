@@ -17,17 +17,22 @@ class I18nMiddleware(BaseMiddleware):
         self.l10ns = l10ns
         self.default_locale = default_locale
 
-    async def __call__(
-        self,
-        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-        event: TelegramObject,
-        data: dict[str, Any],
-    ) -> Any:
+    async def _get_language(self, data: dict[str, Any], event: TelegramObject) -> str:
         user_repo: UserRepository = data["user_repo"]
         language = self.default_locale
         if hasattr(event, "from_user") and event.from_user:
             language = await user_repo.get_language(User(id=event.from_user.id)) or ""
         if language not in self.l10ns:
             language = self.default_locale
-        data[I18N_FORMAT_KEY] = self.l10ns[language].format_value
+        return language
+
+    async def __call__(
+        self,
+        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: dict[str, Any],
+    ) -> Any:
+        data[I18N_FORMAT_KEY] = self.l10ns[
+            await self._get_language(data, event)
+        ].format_value
         return await handler(event, data)
