@@ -1,0 +1,15 @@
+owm_token = ""
+
+[bot]
+token = ""
+
+[redis]
+host = ""
+port = 0
+
+[database]
+host = ""
+port = 0
+username = ""
+password = ""
+database = ""
