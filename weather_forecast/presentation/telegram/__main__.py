@@ -7,6 +7,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram.types import Message
 from aiogram_dialog import DialogManager, StartMode, setup_dialogs
+from aiohttp import ClientSession
 from fluent.runtime import FluentLocalization, FluentResourceLoader
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
@@ -14,14 +15,11 @@ from weather_forecast.application.common.repositories.user import UserRepository
 from weather_forecast.application.create_user.interactor import CreateUser
 from weather_forecast.domain.entities.user import User
 from weather_forecast.infrastructure.config import load_telegram_config
+from weather_forecast.infrastructure.services.weather import WeatherServiceImpl
 from weather_forecast.presentation.telegram.create_user.dialog import create_user
 from weather_forecast.presentation.telegram.middlewares.database_session import (
     DatabaseSessionMiddleware,
     UserRepoMiddleware,
-)
-from weather_forecast.presentation.telegram.middlewares.http_session import (
-    HttpSessionMiddleware,
-    WeatherServiceMiddleware,
 )
 from weather_forecast.presentation.telegram.middlewares.i18n import I18nMiddleware
 from weather_forecast.presentation.telegram.states import CreateUserSG
@@ -46,12 +44,14 @@ async def main() -> None:
 
     engine = create_async_engine(config.database.make_dsn())
 
+    session = ClientSession()
+
     bot = Bot(config.bot.token)
     storage = RedisStorage.from_url(
         config.redis.make_dsn(), key_builder=DefaultKeyBuilder(with_destiny=True)
     )
     dp = Dispatcher(storage=storage, events_isolation=storage.create_isolation())
-    dp["owm_token"] = config.owm_token
+    dp["weather_service"] = WeatherServiceImpl(session, config.owm_token)
 
     dp.message.register(cmd_start, CommandStart())
     dp.message.filter(F.chat.type == ChatType.PRIVATE)
@@ -72,8 +72,6 @@ async def main() -> None:
         DatabaseSessionMiddleware(async_sessionmaker(engine)),
         UserRepoMiddleware(),
         I18nMiddleware(dp["l10ns"]),
-        HttpSessionMiddleware(),
-        WeatherServiceMiddleware(),
     ]:
         dp.message.middleware(middleware)
         dp.callback_query.middleware(middleware)
@@ -85,6 +83,7 @@ async def main() -> None:
         await dp.start_polling(bot)
     finally:
         await engine.dispose()
+        await session.close()
 
 
 if __name__ == "__main__":
