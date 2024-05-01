@@ -5,37 +5,31 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from weather_forecast.application.common.repositories.user import UserRepository
 from weather_forecast.domain.entities.user import User
-from weather_forecast.infrastructure.database import models
+from weather_forecast.infrastructure.database.models import UserModel
 
 
 class UserRepositoryImpl(UserRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def commit(self) -> None:
-        await self.session.commit()
+    async def create(self, user: User) -> None:
+        self.session.add(UserModel.from_entity(user))
 
-    async def add(self, user: User) -> None:
-        user_exists = await self.session.execute(
-            exists().where(models.User.id == user.id).select()
+    async def exists_with_tg_id(self, tg_id: int) -> bool:
+        return bool(
+            await self.session.scalar(exists().where(UserModel.tg_id == tg_id).select())
         )
-        if not user_exists.scalar():
-            self.session.add(models.User(id=user.id))
 
-    async def get_city(self, user: User) -> Optional[str]:
-        city = await self.session.execute(
-            select(models.User.city).where(models.User.id == user.id)
+    async def get_by_tg_id(self, tg_id: int) -> Optional[User]:
+        res = await self.session.scalar(
+            select(UserModel).where(UserModel.tg_id == tg_id)
         )
-        return city.scalar()
+        if res is None:
+            return None
+        return res.to_entity()
 
-    async def get_language(self, user: User) -> Optional[str]:
-        language = await self.session.execute(
-            select(models.User.language).where(models.User.id == user.id)
-        )
-        return language.scalar()
+    async def update_city_by_tg_id(self, tg_id: int, city: str) -> None:
+        await self.session.merge(UserModel(tg_id=tg_id, city=city))
 
-    async def edit_city(self, user: User) -> None:
-        await self.session.merge(models.User(id=user.id, city=user.city))
-
-    async def edit_language(self, user: User) -> None:
-        await self.session.merge(models.User(id=user.id, language=user.language))
+    async def update_language_by_tg_id(self, tg_id: int, language: str) -> None:
+        await self.session.merge(UserModel(tg_id=tg_id, language=language))

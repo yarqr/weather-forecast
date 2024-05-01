@@ -9,6 +9,9 @@ class UserRepository(ABC):
     async def create(self, user: User) -> None: ...
 
     @abstractmethod
+    async def exists_with_tg_id(self, tg_id: int) -> bool: ...
+
+    @abstractmethod
     async def get_by_tg_id(self, tg_id: int) -> Optional[User]: ...
 
     @abstractmethod

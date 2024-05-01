@@ -10,5 +10,6 @@ class CreateUser(Interactor[User, None]):
         self.uow = uow
 
     async def __call__(self, user: User) -> None:
-        await self.user_repo.create(user)
-        await self.uow.commit()
+        if await self.user_repo.exists_with_tg_id(user.tg_id) is False:
+            await self.user_repo.create(user)
+            await self.uow.commit()
