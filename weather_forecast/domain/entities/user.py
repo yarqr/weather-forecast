@@ -1,11 +1,13 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
+from uuid import UUID, uuid4
 
 from weather_forecast.domain.common.entity import Entity
 
 
-@dataclass
+@dataclass(kw_only=True)
 class User(Entity):
-    id: int
-    language: Optional[str] = None
-    city: Optional[str] = None
+    tg_id: int
+    language: Optional[str]
+    city: Optional[str]
+    id: UUID = field(default_factory=uuid4)
