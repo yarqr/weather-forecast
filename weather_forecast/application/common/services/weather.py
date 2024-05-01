@@ -6,5 +6,4 @@ from weather_forecast.domain.entities.weather import Weather
 
 class WeatherService(ABC):
     @abstractmethod
-    async def get_by_user(self, user: User) -> Weather:
-        ...
+    async def get_by_user(self, user: User) -> Weather: ...

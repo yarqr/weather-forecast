@@ -42,7 +42,7 @@ async def weather_getter(
     dialog_manager: DialogManager,
     weather_service: WeatherService,
     user_repo: UserRepository,
-    **_: Any
+    **_: Any,
 ) -> dict[str, Weather]:
     input_widget = dialog_manager.find("input_city")
     if dialog_manager.event.from_user and input_widget:

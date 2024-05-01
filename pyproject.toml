@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "weather_forecast"
+version = "0.1.0"
+description = ""
+authors = ["YarQR <rosya6721@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram-dialog = "^2.1.0"
+sqlalchemy = "^2.0.29"
+adaptix = "^3.0.0b5"
+fluent-runtime = "^0.4.0"
+redis = "^5.0.4"
+alembic = "^1.13.1"
+asyncpg = "^0.29.0"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.10.0"
+pre-commit = "^3.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

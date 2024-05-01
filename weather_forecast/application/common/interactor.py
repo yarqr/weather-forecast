@@ -7,5 +7,4 @@ Response = TypeVar("Response")
 
 class Interactor(Generic[Request, Response], ABC):
     @abstractmethod
-    async def __call__(self, data: Request) -> Response:
-        ...
+    async def __call__(self, data: Request) -> Response: ...
