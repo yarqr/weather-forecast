@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-Request = TypeVar("Request")
-Response = TypeVar("Response")
+Input = TypeVar("Input")
+Output = TypeVar("Output")
 
 
-class Interactor(Generic[Request, Response], ABC):
+class Interactor(Generic[Input, Output], ABC):
     @abstractmethod
-    async def __call__(self, data: Request) -> Response: ...
+    async def __call__(self, data: Input) -> Output: ...
