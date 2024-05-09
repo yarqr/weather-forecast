@@ -1,5 +1,6 @@
 import asyncio
 from pathlib import Path
+from typing import cast
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums import ChatType
@@ -8,41 +9,39 @@ from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram.types import Message
 from aiogram_dialog import DialogManager, StartMode, setup_dialogs
 from aiohttp import ClientSession
+from dishka import FromDishka, make_async_container
+from dishka.integrations.aiogram import inject, setup_dishka
 from fluent.runtime import FluentLocalization, FluentResourceLoader
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from weather_forecast.application.common.repositories.user import UserRepository
-from weather_forecast.application.create_user.interactor import CreateUser
-from weather_forecast.domain.entities.user import User
 from weather_forecast.infrastructure.config import load_telegram_config
 from weather_forecast.infrastructure.services.weather import WeatherServiceImpl
 from weather_forecast.presentation.telegram.create_user.dialog import create_user
-from weather_forecast.presentation.telegram.middlewares.database_session import (
-    DatabaseSessionMiddleware,
-    UserRepoMiddleware,
+from weather_forecast.presentation.telegram.di.providers import (
+    InteractorProvider,
+    DatabaseProvider,
 )
 from weather_forecast.presentation.telegram.middlewares.i18n import I18nMiddleware
 from weather_forecast.presentation.telegram.states import CreateUserSG
-from weather_forecast.presentation.telegram.update_user_city.dialog import (
-    update_user_city,
+from weather_forecast.presentation.telegram.view_weather.dialog import (
+    view_weather,
 )
+from aiogram.types import User as AiogramUser
 
 
+@inject
 async def cmd_start(
-    msg: Message, dialog_manager: DialogManager, user_repo: UserRepository
+    msg: Message, dialog_manager: DialogManager, user_repo: FromDishka[UserRepository]
 ) -> None:
-    if msg.from_user:
-        await CreateUser(user_repo)(User(id=msg.from_user.id))
-        state = CreateUserSG.choose_language
-        if await user_repo.get_language(User(id=msg.from_user.id)):
-            state = CreateUserSG.main
-        await dialog_manager.start(state, mode=StartMode.RESET_STACK)
+    user = await user_repo.get_by_tg_id(cast(AiogramUser, msg.from_user).id)
+    state = CreateUserSG.choose_language
+    if user is not None:
+        state = CreateUserSG.main
+    await dialog_manager.start(state, mode=StartMode.RESET_STACK)
 
 
 async def main() -> None:
     config = load_telegram_config(Path(__file__).parents[3] / "config.toml")
-
-    engine = create_async_engine(config.database.make_dsn())
 
     session = ClientSession()
 
@@ -68,21 +67,21 @@ async def main() -> None:
         for locale in ["ru", "en"]
     }
 
-    for middleware in [
-        DatabaseSessionMiddleware(async_sessionmaker(engine)),
-        UserRepoMiddleware(),
-        I18nMiddleware(dp["l10ns"]),
-    ]:
+    for middleware in [I18nMiddleware(dp["l10ns"])]:
         dp.message.middleware(middleware)
         dp.callback_query.middleware(middleware)
 
-    dp.include_routers(create_user, update_user_city)
+    dp.include_routers(create_user(), view_weather())
     setup_dialogs(dp)
+
+    setup_dishka(
+        make_async_container(DatabaseProvider(config.database), InteractorProvider()),
+        dp,
+    )
 
     try:
         await dp.start_polling(bot)
     finally:
-        await engine.dispose()
         await session.close()
 
 

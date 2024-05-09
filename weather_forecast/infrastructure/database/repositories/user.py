@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import exists, select
+from sqlalchemy import exists, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from weather_forecast.application.common.repositories.user import UserRepository
@@ -29,7 +29,11 @@ class UserRepositoryImpl(UserRepository):
         return res.to_entity()
 
     async def update_city_by_tg_id(self, tg_id: int, city: str) -> None:
-        await self.session.merge(UserModel(tg_id=tg_id, city=city))
+        await self.session.execute(
+            update(UserModel).values(city=city).where(UserModel.tg_id == tg_id)
+        )
 
     async def update_language_by_tg_id(self, tg_id: int, language: str) -> None:
-        await self.session.merge(UserModel(tg_id=tg_id, language=language))
+        await self.session.execute(
+            update(UserModel).values(language=language).where(UserModel.tg_id == tg_id)
+        )

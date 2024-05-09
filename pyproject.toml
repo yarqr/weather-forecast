@@ -13,6 +13,7 @@ fluent-runtime = "^0.4.0"
 redis = "^5.0.4"
 alembic = "^1.13.1"
 asyncpg = "^0.29.0"
+dishka = "^1.1.1"
 
 
 [tool.poetry.group.dev.dependencies]

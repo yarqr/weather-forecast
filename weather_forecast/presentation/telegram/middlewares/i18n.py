@@ -2,10 +2,10 @@ from typing import Any, Awaitable, Callable
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
+from dishka.integrations.aiogram import CONTAINER_NAME
 from fluent.runtime import FluentLocalization
 
 from weather_forecast.application.common.repositories.user import UserRepository
-from weather_forecast.domain.entities.user import User
 from weather_forecast.presentation.telegram.widgets.i18n_format import I18N_FORMAT_KEY
 
 
@@ -18,10 +18,12 @@ class I18nMiddleware(BaseMiddleware):
         self.default_locale = default_locale
 
     async def _get_language(self, data: dict[str, Any], event: TelegramObject) -> str:
-        user_repo: UserRepository = data["user_repo"]
+        user_repo: UserRepository = await data[CONTAINER_NAME].get(UserRepository)
         language = self.default_locale
-        if hasattr(event, "from_user") and event.from_user:
-            language = await user_repo.get_language(User(id=event.from_user.id)) or ""
+        if hasattr(event, "from_user") and event.from_user is not None:
+            user = await user_repo.get_by_tg_id(event.from_user.id)
+            if user is not None:
+                language = user.language
         if language not in self.l10ns:
             language = self.default_locale
         return language
