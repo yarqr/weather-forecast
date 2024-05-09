@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any, cast, Optional
 
 from aiogram import F
 from aiogram.types import Message
@@ -52,7 +52,7 @@ async def weather_getter(
     weather_service: WeatherService,
     user_repo: FromDishka[UserRepository],
     **_: Any,
-) -> dict[str, Weather]:
+) -> dict[str, Optional[Weather]]:
     city = cast(ManagedTextInput[str], dialog_manager.find("input_city")).get_value()
     if city == "None":
         user = await user_repo.get_by_tg_id(
@@ -74,7 +74,8 @@ def view_weather() -> Dialog:
             state=UpdateUserCitySG.input_city,
         ),
         Window(
-            I18nFormat("weather-info"),
+            I18nFormat("weather-info", when="weather"),
+            I18nFormat("incorrect-city", when=~F["weather"]),
             Cancel(I18nFormat("btn-to-main-menu")),
             getter=weather_getter,
             state=UpdateUserCitySG.result,

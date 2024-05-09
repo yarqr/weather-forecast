@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, cast
 
 from sqlalchemy import exists, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,8 +16,11 @@ class UserRepositoryImpl(UserRepository):
         self.session.add(UserModel.from_entity(user))
 
     async def exists_with_tg_id(self, tg_id: int) -> bool:
-        return bool(
-            await self.session.scalar(exists().where(UserModel.tg_id == tg_id).select())
+        return cast(
+            bool,
+            await self.session.scalar(
+                exists().where(UserModel.tg_id == tg_id).select()
+            ),
         )
 
     async def get_by_tg_id(self, tg_id: int) -> Optional[User]:

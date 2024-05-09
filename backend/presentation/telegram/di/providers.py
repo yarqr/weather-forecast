@@ -47,9 +47,7 @@ class DatabaseProvider(Provider):
         async with session_maker() as session:
             yield session
 
-    @provide(scope=Scope.REQUEST)
-    async def get_uow(self, session: AsyncSession) -> UnitOfWork:
-        return UnitOfWorkImpl(session)
+    uow = provide(UnitOfWorkImpl, scope=Scope.REQUEST, provides=UnitOfWork)
 
     @provide(scope=Scope.REQUEST)
     async def get_user_repo(self, session: AsyncSession) -> UserRepository:
