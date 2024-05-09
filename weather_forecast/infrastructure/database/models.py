@@ -15,7 +15,7 @@ class UserModel(Base):
     __tablename__ = "users"
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
     tg_id: Mapped[int] = mapped_column(BigInteger, unique=True)
-    language: Mapped[Optional[str]] = mapped_column(String(2), nullable=True)
+    language: Mapped[str] = mapped_column(String(2))
     city: Mapped[Optional[str]] = mapped_column(String(256), nullable=True)
 
     @classmethod
