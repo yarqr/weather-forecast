@@ -29,7 +29,7 @@ from backend.presentation.telegram.view_weather.dialog import (
 from aiogram.types import User as AiogramUser
 
 
-@inject
+@inject  # type: ignore[misc]
 async def cmd_start(
     msg: Message, dialog_manager: DialogManager, user_repo: FromDishka[UserRepository]
 ) -> None:
