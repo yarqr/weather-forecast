@@ -7,7 +7,7 @@ buttonToSwitchTheme.addEventListener("click", () => {
     buttonToSwitchTheme.innerHTML = "";
     buttonToSwitchTheme.insertAdjacentHTML(
       "afterbegin",
-      `<img src = "../../assets/icons/sun.png" class = "clicked-img">`
+      `<img src = "/assets/icons/sun.png" class = "clicked-img">`
     );
   } else {
     mainBody.classList.remove("main-night");
@@ -15,7 +15,7 @@ buttonToSwitchTheme.addEventListener("click", () => {
     buttonToSwitchTheme.innerHTML = "";
     buttonToSwitchTheme.insertAdjacentHTML(
       "afterbegin",
-      `<img src = "../../assets/icons/moon.png">`
+      `<img src = "/assets/icons/moon.png">`
     );
   }
 });
