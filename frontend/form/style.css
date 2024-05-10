@@ -1,8 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@700&family=Archivo:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=Overpass:ital,wght@0,100..900;1,100..900&family=Oxygen:wght@300;400;700&family=Recursive:wght@600&family=Roboto+Condensed&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
-:root {
-}
-
 * {
   border: none;
 }
@@ -153,4 +150,29 @@ input::placeholder {
 .main__form__submit-button__text {
   position: relative;
   transition: all 0.25s ease-Out;
+}
+
+.main__return-button {
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+  font-family: "Bebas Neue", sans-serif;
+  align-self: center;
+  background: transparent;
+  backdrop-filter: blur(25px);
+  color: white;
+  font-size: 100px;
+  width: 200px;
+}
+
+.res-page {
+  height: 100vh;
+  display: flex;
+  font-size: 200px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main__return-button:hover {
+  box-shadow: 0 0 80px #ffffff;
 }
