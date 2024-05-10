@@ -58,6 +58,18 @@ class TelegramConfig:
     database: DatabaseConfigPart
 
 
+@dataclass
+class WebConfigPart:
+    host: str
+    port: int
+
+
+@dataclass
+class WebConfig:
+    owm_token: str
+    web: WebConfigPart
+
+
 def _load_database_config_part(path: Path) -> DatabaseConfigPart:
     retort = Retort()
     with open(path, "rb") as f:
@@ -68,3 +80,9 @@ def load_telegram_config(path: Path) -> TelegramConfig:
     retort = Retort()
     with open(path, "rb") as f:
         return retort.load(tomllib.load(f), TelegramConfig)
+
+
+def load_web_config(path: Path) -> WebConfig:
+    retort = Retort()
+    with open(path, "rb") as f:
+        return retort.load(tomllib.load(f), WebConfig)

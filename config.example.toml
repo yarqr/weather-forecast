@@ -3,6 +3,10 @@ owm_token = ""
 [bot]
 token = ""
 
+[web]
+host = ""
+port = 0
+
 [redis]
 host = ""
 port = 0

@@ -14,6 +14,8 @@ redis = "^5.0.4"
 alembic = "^1.13.1"
 asyncpg = "^0.29.0"
 dishka = "^1.1.1"
+fastapi = "^0.111.0"
+uvicorn = "^0.29.0"
 
 
 [tool.poetry.group.dev.dependencies]
