@@ -7,5 +7,5 @@ let serializeForm = (formNode) => {
 cityForm.addEventListener("submit", (event) => {
   event.preventDefault();
   let city = serializeForm(cityForm);
-  window.location.replace(`${window.location}` + `result/city=${city}`);
+  window.location.replace(`${window.location}` + `result?city=${city}`);
 });
