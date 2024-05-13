@@ -12,19 +12,14 @@ async function req() {
   let result = await response.json();
   returnButton.removeAttribute("hidden");
   if (result !== null) {
-    body.insertAdjacentHTML(
-      "afterbegin",
-      `<section> ${city.toUpperCase()}</section> 
+    let txt = `<section> ${city.toUpperCase()}</section> 
         <section class = "main__temp">  ${Math.round(
           result.temperature
-        )} °C </section>`
-    );
+        )} °C </section>`;
   } else {
-    body.insertAdjacentHTML(
-      "afterbegin",
-      `<section> city not found </section>`
-    );
+    let txt = `<section> city not found </section>`;
   }
+  body.insertAdjacentHTML("afterbegin", txt);
 }
 
 await req();
