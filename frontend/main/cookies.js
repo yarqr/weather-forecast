@@ -1,21 +1,19 @@
 let switchButton = document.querySelector(".nav--panel__theme-switcher");
 let main = document.querySelector("body");
-
+let switchImg = ``
 if (document.cookie !== '') {
   switchButton.innerHTML = ""
   main.classList.remove("main-night", "main-day")
   main.classList.add(document.cookie.slice(3))
   if (document.cookie === 'bg=main-night') {
-    switchButton.insertAdjacentHTML(
-      "afterbegin",
-      `<img src = "/assets/icons/sun.png" class = "clicked-img">`
-    );
+    switchImg = `<img src = "/assets/icons/sun.png" class = "clicked-img">`
   } else {
-    switchButton.insertAdjacentHTML(
-      "afterbegin",
-      `<img src = "/assets/icons/moon.png">`
-    );
+    switchImg = `<img src = "/assets/icons/moon.png">`
   }
+  switchButton.insertAdjacentHTML(
+      "afterbegin",
+      switchImg
+    );
 }
 
 switchButton.addEventListener("click", () => {
@@ -25,7 +23,3 @@ switchButton.addEventListener("click", () => {
     document.cookie = 'bg=main-day'
   }
 });
-
-
-
-
