@@ -166,6 +166,7 @@ input::placeholder {
 }
 
 .res-page {
+  width: 100%;
   height: 80%;
   display: flex;
   font-size: 200px;
