@@ -19,4 +19,11 @@ class WeatherServiceImpl(WeatherService):
             if resp.status != 200:
                 return None
             data = await resp.json()
-            return Weather(temperature=data["main"]["temp"])
+            main_data = data["main"]
+            return Weather(
+                temperature=main_data["temp"],
+                feels_like=main_data["feels_like"],
+                humidity=main_data["humidity"],
+                wind_speed=data["wind"]["speed"],
+                description=data["weather"][0]["main"]
+            )
