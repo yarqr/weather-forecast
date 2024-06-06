@@ -25,5 +25,5 @@ class WeatherServiceImpl(WeatherService):
                 feels_like=main_data["feels_like"],
                 humidity=main_data["humidity"],
                 wind_speed=data["wind"]["speed"],
-                description=data["weather"][0]["main"]
+                description=data["weather"][0]["main"],
             )
