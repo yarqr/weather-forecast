@@ -195,13 +195,16 @@ input::placeholder {
 
 .main__res {
   font-size: 160px;
-  text-align: center;
   width: 100%;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 50px
 }
 
 .main__res__flag {
   margin-right: 0;
+  margin-top: 0;
   width: 130px;
   height: 120px;
 }

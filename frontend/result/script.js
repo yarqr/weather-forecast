@@ -18,7 +18,7 @@ class Weather {
     this.humidity = humidity
     this.wind_speed = wind_speed
   }
-  match() {
+  matchStatetoIcons() {
     switch (this.descriprtion) {
       case 'Rain':
         return "/assets/icons/thunderstorm.png"
@@ -27,7 +27,7 @@ class Weather {
       case 'Thunderstorm':
         return "/assets/icons/thunderstorm.png"
       case 'Clear':
-        return "/assets/icons/sunny.png"
+        return "/assets/icons/clear.png"
       case 'Mist':
         return "/assets/icons/fog.png"
       case 'Haze':
@@ -48,10 +48,10 @@ async function req() {
   returnButton.removeAttribute("hidden");
   if (result !== null) {
     let weather = new Weather(result.temperature, result.description, result.feels_like, result.country, result.humidity, result.wind_speed)
-    txt = `<section class = "main__res">${city.toUpperCase() + ' '.repeat(150)}<img src=${weather.generImg()} class = "main__res__flag"/></section> 
+    txt = `<section class = "main__res"><article class="a1">${city.toUpperCase()}</article><img src=${weather.generImg()} class = "main__res__flag a2"/></section> 
         <section class = "main__temp">  ${Math.round(
           result.temperature
-        )} °C   <img class = "main__temp__state-icon" src = ${weather.match()}/> </section>
+        )} °C   <img class = "main__temp__state-icon" src = ${weather.matchStatetoIcons()}/> </section>
         <section class = "main__wind">wind speed: ${weather.wind_speed} m/s</section>`
   } else {
     txt = `<section> city not found </section>`;
