@@ -21,24 +21,24 @@ class Weather {
   match() {
     switch (this.descriprtion) {
       case 'Rain':
-        return "/assets/icons/free-icon-storm-578132.png"
+        return "/assets/icons/thunderstorm.png"
       case 'Clouds':
-        return "/assets/icons/free-icon-cloud-4814293.png"
+        return "/assets/icons/clouds.png"
       case 'Thunderstorm':
-        return "/assets/icons/free-icon-storm-3026395.png"
+        return "/assets/icons/thunderstorm.png"
       case 'Clear':
-        return "/assets/icons/free-icon-sun-4814268.png"
+        return "/assets/icons/sunny.png"
       case 'Mist':
-        return "/assets/icons/free-icon-fog-3750506.png"
+        return "/assets/icons/fog.png"
       case 'Haze':
-        return "/assets/icons/free-icon-fog-3750506.png"
+        return "/assets/icons/fog.png"
     }
   }
   generImg() {
-    if (this.country !== "UA") {
-      return `https://flagsapi.com/${this.country}/flat/64.png`
+    if (this.country === "UA") {
+      return `https://flagsapi.com/RU/flat/64.png`
     }
-    return `https://flagsapi.com/RU/flat/64.png`
+    return `https://flagsapi.com/${this.country}/flat/64.png`
   }
 }
 async function req() {
