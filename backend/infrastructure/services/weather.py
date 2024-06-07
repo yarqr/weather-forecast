@@ -26,4 +26,5 @@ class WeatherServiceImpl(WeatherService):
                 humidity=main_data["humidity"],
                 wind_speed=data["wind"]["speed"],
                 description=data["weather"][0]["main"],
+                country=data["sys"]["country"],
             )

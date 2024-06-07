@@ -10,3 +10,4 @@ class Weather(Entity):
     humidity: int
     wind_speed: float
     description: str
+    country: str
