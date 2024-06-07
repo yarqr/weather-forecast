@@ -179,13 +179,51 @@ input::placeholder {
 }
 
 .main__temp {
-  font-size: 150px;
+  font-size: 110px;
   font-weight: 300;
+  display: flex;
+  flex-direction: row;
+  width: 25%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main__description {
+  font-size: 60px;
+  font-weight: 250;
+}
+
+.main__res {
+  font-size: 160px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px
+}
+
+.main__res__flag {
+  margin-right: 0;
+  margin-top: 0;
+  width: 130px;
+  height: 120px;
+}
+
+.main__wind {
+  font-size: 50px;
+}
+
+.main__temp__state-icon {
+  width: 100px;
+  height: 100px;
+  margin-right: 0;
+  margin-top: 0;
 }
 
 .second {
   align-items: center;
 }
+
 .main__return-button:hover {
   box-shadow: 0 0 80px #ffffff;
 }
