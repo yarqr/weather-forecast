@@ -54,11 +54,6 @@ def create_user() -> Dialog:
                 ["🇷🇺 RU", "🏴󠁧󠁢󠁥󠁮󠁧󠁿 EN"],
                 on_click=add_user,
             ),
-            SwitchTo(
-                I18nFormat("btn-back"),
-                "b_settings",
-                CreateUserSG.settings,
-            ),
             state=CreateUserSG.choose_language,
         ),
         Window(
