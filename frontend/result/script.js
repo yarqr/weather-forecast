@@ -32,6 +32,8 @@ class Weather {
         return "/assets/icons/fog.png"
       case 'Haze':
         return "/assets/icons/fog.png"
+      case 'Drizzle':
+        return "/assets/icons/drizzle.png"
     }
   }
   generImg() {
