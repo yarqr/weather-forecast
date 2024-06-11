@@ -37,9 +37,6 @@ class Weather {
     }
   }
   generImg() {
-    if (this.country === "UA") {
-      return `https://flagsapi.com/RU/flat/64.png`
-    }
     return `https://flagsapi.com/${this.country}/flat/64.png`
   }
 }
